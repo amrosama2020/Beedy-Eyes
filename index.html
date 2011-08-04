@@ -36,8 +36,9 @@
 				jQuery(document).mousemove(function(e){
 					windowX=e.clientX;
 					windowY=e.clientY;
+					console.log(windowX,windowY); 
 					jQuery(".eyeBall").each(function(i,i2){
-						
+						/*
 						var parentPosition=$(this).parent().position();
 						var maxLeft=$(this).parent().width() - $(this).width();
 						var minLeft=0;
@@ -62,16 +63,19 @@
 							eyeLeft+=leftRadiusOffst;
 						}
 						
-						/*
 						 * FAIL NO.1
 						 
-						*/
 						
 						
 						
 						$(".debug").html("eyeLeft:"+eyeLeft+"\neyeTop:"+eyeTop);
 						$(this).css("margin-left",eyeLeft);
 						$(this).css("margin-top",eyeTop);
+						*/
+						
+						
+						
+						
 					});
 				})
 			});
