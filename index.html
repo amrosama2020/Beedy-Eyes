@@ -8,6 +8,7 @@
 				width: 100px;
 				height: 100px;
 				border-radius: 60px;
+				margin: 0 auto;
 			}
 			.eyeContainer{
 				border: 1px solid black;
@@ -36,13 +37,13 @@
 				jQuery(document).click(function(e){
 					windowX=e.clientX;//x1
 					windowY=e.clientY;//y1
-					console.log(windowX,windowY); 
 					jQuery(".eyeBall:first").each(function(i,i2){ 
 						var eyeContainerPosition=$(this).parent().offset();
 						var eyeCenterX=eyeContainerPosition.left+$(this).parent().width()/2; //x2
 						var eyeCenterY=eyeContainerPosition.top+$(this).parent().height()/2; //y2
 						
 						var slope=(eyeCenterY-windowY)/(eyeCenterX-windowX);
+						//if(slope<0)slope*=-1;
 						console.log("mouse:"+windowX+","+windowY);
 						console.log("eye center:"+eyeCenterX+","+eyeCenterY);
 						console.log("slope:"+slope);
@@ -69,14 +70,16 @@
 						var x=Math.cos(
 								Math.atan(slope)
 							)*targetDistance;
-						x=x+windowX;
+						console.log("x before:"+x);
+						x+=windowX;
+						console.log("x after:"+x);
 						var y=Math.sin(
 								Math.atan(slope)
 							)*targetDistance;
-							
 						y=y+windowY;
-						jQuery("<div class='eyeBall' style='margin:0px;position:absolute;left:"+x+"px;top:"+y+"px' ></div>").appendTo(document.body);
-						console.log("target position:"+(x)+","+y);
+						var el=jQuery("<div class='eyeBall' style='margin:0px;position:absolute;left:"+x+"px;top:"+y+"px' ></div>");
+						el.appendTo(document.body);
+						console.log("target position:"+(x)+","+y,el);
 						/*
 						var parentPosition=$(this).parent().position();
 						var maxLeft=$(this).parent().width() - $(this).width();
