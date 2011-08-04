@@ -1,0 +1,92 @@
+<html>
+	<head>
+		<title>Playground</title>
+		<script src="jquery.js" type="text/javascript" ></script>
+		<style type="text/css">
+			.face{
+				border: 1px solid black;
+				width: 100px;
+				height: 100px;
+				border-radius: 60px;
+			}
+			.eyeContainer{
+				border: 1px solid black;
+				width: 25px;
+				height: 25px;
+				border-radius: 60px;
+				float: left;
+				margin-top: 16px;
+				margin-left: 15px;
+			}
+			.eyeBall{
+				border: 1px solid black;
+				background:black;
+				width: 5px;
+				height: 5px;
+				border-radius: 60px;
+				float: left;
+				margin-top: 9px;
+				margin-left: 9px;
+			}
+		</style>
+		<script type="text/javascript">
+			var windowX=-1;
+			var windowY=-1;
+			jQuery(document).ready(function(){
+				jQuery(document).mousemove(function(e){
+					windowX=e.clientX;
+					windowY=e.clientY;
+					jQuery(".eyeBall").each(function(i,i2){
+						
+						/*
+						 * FAIL NO.1
+						 
+						var parentPosition=$(this).parent().position();
+						var maxLeft=$(this).parent().width() - $(this).width();
+						var minLeft=0;
+						var eyeLeft=windowX-parentPosition.left-$(this).parent().width()/2-$(this).width();
+						eyeLeft=(eyeLeft<maxLeft)?(eyeLeft>minLeft?eyeLeft:minLeft):maxLeft;
+						
+						
+						var maxTop=$(this).parent().height() - $(this).height();
+						var minTop=0;
+						var eyeTop=windowY-parentPosition.top-$(this).parent().height()/2-$(this).height();
+						eyeTop=(eyeTop<maxTop)?(eyeTop>minTop?eyeTop:minTop):maxTop;
+						
+						//fixing position for radius
+						var leftRadiusOffst=(maxTop/2)-eyeTop;
+						if (eyeLeft > maxLeft / 2) {
+							if (leftRadiusOffst > 0) 
+								leftRadiusOffst *= -1;
+							eyeLeft+=leftRadiusOffst;
+						}else if (eyeLeft < maxLeft / 2) {
+							if (leftRadiusOffst < 0) 
+								leftRadiusOffst *= -1;
+							eyeLeft+=leftRadiusOffst;
+						}
+						*/
+						
+						
+						
+						$(".debug").html("eyeLeft:"+eyeLeft+"\neyeTop:"+eyeTop);
+						$(this).css("margin-left",eyeLeft);
+						$(this).css("margin-top",eyeTop);
+					});
+				})
+			});
+		</script>
+	</head>
+	<body>
+		
+		<h3>Playground: beedy eyes</h3>
+		<div class='face'>
+			<div class='eyeContainer'>
+				<div class='eyeBall'></div>
+			</div>
+			<div class='eyeContainer'>
+				<div class='eyeBall'></div>
+			</div>
+		</div>
+		<pre class='debug'></pre>
+	</body>
+</html>
