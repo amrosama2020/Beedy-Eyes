@@ -33,11 +33,50 @@
 			var windowX=-1;
 			var windowY=-1;
 			jQuery(document).ready(function(){
-				jQuery(document).mousemove(function(e){
-					windowX=e.clientX;
-					windowY=e.clientY;
+				jQuery(document).click(function(e){
+					windowX=e.clientX;//x1
+					windowY=e.clientY;//y1
 					console.log(windowX,windowY); 
-					jQuery(".eyeBall").each(function(i,i2){
+					jQuery(".eyeBall:first").each(function(i,i2){ 
+						var eyeContainerPosition=$(this).parent().offset();
+						var eyeCenterX=eyeContainerPosition.left+$(this).parent().width()/2; //x2
+						var eyeCenterY=eyeContainerPosition.top+$(this).parent().height()/2; //y2
+						
+						var slope=(eyeCenterY-windowY)/(eyeCenterX-windowX);
+						console.log("mouse:"+windowX+","+windowY);
+						console.log("eye center:"+eyeCenterX+","+eyeCenterY);
+						console.log("slope:"+slope);
+						
+						//getting distance between these 2 points
+						var toCenterdistance=Math.sqrt(
+							Math.pow(
+								(eyeCenterX-windowX)
+								,
+								2
+							)
+							+
+							Math.pow(
+								(eyeCenterY-windowY)
+								,
+								2
+							)
+						);
+						console.log("distance to center:"+toCenterdistance);
+						var targetDistance=toCenterdistance-($(this).parent().width()/2);
+						console.log("distance to target point:"+targetDistance);
+						
+						//getting final x and y
+						var x=Math.cos(
+								Math.atan(slope)
+							)*targetDistance;
+						x=x+windowX;
+						var y=Math.sin(
+								Math.atan(slope)
+							)*targetDistance;
+							
+						y=y+windowY;
+						jQuery("<div class='eyeBall' style='margin:0px;position:absolute;left:"+x+"px;top:"+y+"px' ></div>").appendTo(document.body);
+						console.log("target position:"+(x)+","+y);
 						/*
 						var parentPosition=$(this).parent().position();
 						var maxLeft=$(this).parent().width() - $(this).width();
