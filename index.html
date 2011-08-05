@@ -56,29 +56,34 @@
 						//console.log("slope:"+slope);
 						//getting distance between these 2 points
 						var toCenterdistance=getDistance(eyePosition,mousePosition);
-						//console.log("distance to center:"+toCenterdistance);
 						var targetDistance=toCenterdistance-($(this).width()/2);
-						//console.log("diff:"+(toCenterdistance-targetDistance));
-						//console.log("distance to target point:"+targetDistance);
-						//getting final x and y
-						
-						var x=Math.cos(
+						console.log();
+						if(targetDistance>($(this).width()/2)){
+							//console.log("diff:"+(toCenterdistance-targetDistance));
+							//console.log("distance to target point:"+targetDistance);
+							//getting final x and y
+							
+							var x=Math.cos(
+									Math.atan(slope)
+							)*targetDistance;
+							if(eyePosition.x>mousePosition.x){
+								x+=mousePosition.x;
+							}else if(eyePosition.x<mousePosition.x){
+								x=-x+mousePosition.x;
+							}
+							
+							
+							var y=Math.sin(
 								Math.atan(slope)
-						)*targetDistance;
-						if(eyePosition.x>mousePosition.x){
-							x+=mousePosition.x;
-						}else if(eyePosition.x<mousePosition.x){
-							x=-x+mousePosition.x;
-						}
-						
-						
-						var y=Math.sin(
-							Math.atan(slope)
-						)*targetDistance;
-						if(eyePosition.x>mousePosition.x){
-								y+=mousePosition.y;
-						}else if(eyePosition.x<mousePosition.x){
-							y=-y+mousePosition.y;
+							)*targetDistance;
+							if(eyePosition.x>mousePosition.x){
+									y+=mousePosition.y;
+							}else if(eyePosition.x<mousePosition.x){
+								y=-y+mousePosition.y;
+							}
+						}else{
+							x=mousePosition.x-($(this).width()/2);
+							y=mousePosition.y-($(this).width()/2);
 						}
 						//console.log("#eyeBall_"+$(this).attr("rel"));
 						$("#eyeBall_"+$(this).attr("rel")).css({
