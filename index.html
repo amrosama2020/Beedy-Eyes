@@ -28,110 +28,91 @@
 				float: left;
 				margin-top: 9px;
 				margin-left: 9px;
+				position: absolute;
 			}
 		</style>
 		<script type="text/javascript">
 			var windowX=-1;
 			var windowY=-1;
+			function getSlope(loc1,loc2){
+				return (loc1.y-loc2.y)/(loc1.x-loc2.x);
+			}
 			jQuery(document).ready(function(){
-				jQuery(document).click(function(e){
-					windowX=e.clientX;//x1
-					windowY=e.clientY;//y1
-					jQuery(".eyeBall:first").each(function(i,i2){ 
-						var eyeContainerPosition=$(this).parent().offset();
-						var eyeCenterX=eyeContainerPosition.left+$(this).parent().width()/2; //x2
-						var eyeCenterY=eyeContainerPosition.top+$(this).parent().height()/2; //y2
-						
-						var slope=(eyeCenterY-windowY)/(eyeCenterX-windowX);
+				jQuery(document).mousemove(function(e){
+					var mousePosition={
+						'x':e.pageX,
+						'y':e.pageY
+					};
+					jQuery(".eyeContainer").each(function(i,i2){ 
+						var eyeContainerPosition=$(this).offset();
+						var eyePosition={
+							'x':eyeContainerPosition.left,
+							'y':eyeContainerPosition.top
+						}
+						var slope=getSlope(eyePosition,mousePosition);
 						//if(slope<0)slope*=-1;
-						console.log("mouse:"+windowX+","+windowY);
-						console.log("eye center:"+eyeCenterX+","+eyeCenterY);
-						console.log("slope:"+slope);
-						
+						//console.log("mouse:"+mousePosition.x+","+mousePosition.y);
+						//console.log("eye center:"+eyePosition.x+","+eyePosition.y);
+						//console.log("slope:"+slope);
 						//getting distance between these 2 points
-						var toCenterdistance=Math.sqrt(
-							Math.pow(
-								(eyeCenterX-windowX)
-								,
-								2
-							)
-							+
-							Math.pow(
-								(eyeCenterY-windowY)
-								,
-								2
-							)
-						);
-						console.log("distance to center:"+toCenterdistance);
-						var targetDistance=toCenterdistance-($(this).parent().width()/2);
-						console.log("distance to target point:"+targetDistance);
-						
+						var toCenterdistance=getDistance(eyePosition,mousePosition);
+						//console.log("distance to center:"+toCenterdistance);
+						var targetDistance=toCenterdistance-($(this).width()/2);
+						//console.log("diff:"+(toCenterdistance-targetDistance));
+						//console.log("distance to target point:"+targetDistance);
 						//getting final x and y
+						
 						var x=Math.cos(
 								Math.atan(slope)
-							)*targetDistance;
-						console.log("x before:"+x);
-						x+=windowX;
-						console.log("x after:"+x);
-						var y=Math.sin(
-								Math.atan(slope)
-							)*targetDistance;
-						y=y+windowY;
-						var el=jQuery("<div class='eyeBall' style='margin:0px;position:absolute;left:"+x+"px;top:"+y+"px' ></div>");
-						el.appendTo(document.body);
-						console.log("target position:"+(x)+","+y,el);
-						/*
-						var parentPosition=$(this).parent().position();
-						var maxLeft=$(this).parent().width() - $(this).width();
-						var minLeft=0;
-						var eyeLeft=windowX-parentPosition.left-$(this).parent().width()/2-$(this).width();
-						eyeLeft=(eyeLeft<maxLeft)?(eyeLeft>minLeft?eyeLeft:minLeft):maxLeft;
-						
-						
-						var maxTop=$(this).parent().height() - $(this).height();
-						var minTop=0;
-						var eyeTop=windowY-parentPosition.top-$(this).parent().height()/2-$(this).height();
-						eyeTop=(eyeTop<maxTop)?(eyeTop>minTop?eyeTop:minTop):maxTop;
-						
-						//fixing position for radius
-						var leftRadiusOffst=(maxTop/2)-eyeTop;
-						if (eyeLeft > maxLeft / 2) {
-							if (leftRadiusOffst > 0) 
-								leftRadiusOffst *= -1;
-							eyeLeft+=leftRadiusOffst;
-						}else if (eyeLeft < maxLeft / 2) {
-							if (leftRadiusOffst < 0) 
-								leftRadiusOffst *= -1;
-							eyeLeft+=leftRadiusOffst;
+						)*targetDistance;
+						if(eyePosition.x>mousePosition.x){
+							x+=mousePosition.x;
+						}else if(eyePosition.x<mousePosition.x){
+							x=-x+mousePosition.x;
 						}
 						
-						 * FAIL NO.1
-						 
 						
-						
-						
-						$(".debug").html("eyeLeft:"+eyeLeft+"\neyeTop:"+eyeTop);
-						$(this).css("margin-left",eyeLeft);
-						$(this).css("margin-top",eyeTop);
-						*/
-						
-						
-						
-						
+						var y=Math.sin(
+							Math.atan(slope)
+						)*targetDistance;
+						if(eyePosition.x>mousePosition.x){
+								y+=mousePosition.y;
+						}else if(eyePosition.x<mousePosition.x){
+							y=-y+mousePosition.y;
+						}
+						//console.log("#eyeBall_"+$(this).attr("rel"));
+						$("#eyeBall_"+$(this).attr("rel")).css({
+							'left':x+'px',
+							'top':y+'px',
+						});
 					});
 				})
 			});
+			function getDistance(loc1,loc2){
+				return Math.sqrt(
+					Math.pow(
+						(loc1.x-loc2.x)
+						,
+						2
+					)
+					+
+					Math.pow(
+						(loc1.y-loc2.y)
+						,   
+						2
+					)
+				);
+			}
 		</script>
 	</head>
 	<body>
-		
+<div class='eyeBall' id='eyeBall_1'></div>
+<div class='eyeBall' id='eyeBall_2' ></div>		
 		<h3>Playground: beedy eyes</h3>
 		<div class='face'>
-			<div class='eyeContainer'>
-				<div class='eyeBall'></div>
+			<div class='eyeContainer' rel='1'>
 			</div>
-			<div class='eyeContainer'>
-				<div class='eyeBall'></div>
+			<div class='eyeContainer' rel='2'>
 			</div>
 		</div>
 		<pre class='debug'></pre>
