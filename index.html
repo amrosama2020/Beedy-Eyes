@@ -1,130 +1,20 @@
+<!DOCTYPE html>
 <html>
 	<head>
 		<title>Playground</title>
 		<script src="jquery.js" type="text/javascript" ></script>
-		<style type="text/css">
-			.face{
-				border: 1px solid black;
-				width: 100px;
-				height: 100px;
-				border-radius: 60px;
-				margin: 0 auto;
-			}
-			.eyeContainer{
-				border: 1px solid black;
-				width: 25px;
-				height: 25px;
-				border-radius: 60px;
-				float: left;
-				margin-top: 16px;
-				margin-left: 15px;
-			}
-			.eyeBall{
-				border: 1px solid black;
-				background:black;
-				width: 5px;
-				height: 5px;
-				border-radius: 60px;
-				float: left;
-				margin-top: 9px;
-				margin-left: 9px;
-				position: absolute;
-			}
-		</style>
-		<script type="text/javascript">
-			var windowX=-1;
-			var windowY=-1;
-			function getSlope(loc1,loc2){
-				return (loc1.y-loc2.y)/(loc1.x-loc2.x);
-			}
-			jQuery(document).ready(function(){
-				jQuery(document).mousemove(function(e){
-					var mousePosition={
-						'x':e.pageX,
-						'y':e.pageY
-					};
-					jQuery(".eyeContainer").each(function(i,i2){ 
-						var eyeContainerPosition=$(this).offset();
-						var eyePosition={
-							'x':eyeContainerPosition.left,
-							'y':eyeContainerPosition.top
-						}
-						var slope=getSlope(eyePosition,mousePosition);
-						//if(slope<0)slope*=-1;
-						//console.log("mouseeeee:"+mousePosition.x+","+mousePosition.y);
-						//console.log("eye center:"+eyePosition.x+","+eyePosition.y);
-						//console.log("slope:"+slope);
-						//getting distance between these 2 points
-						var toCenterdistance=getDistance(eyePosition,mousePosition);
-						var targetDistance=toCenterdistance-($(this).width()/2);
-						
-						if( true ||
-							(mousePosition.x-($(this).width()/2)>eyeContainerPosition.left && mousePosition.x<eyeContainerPosition.left+$(this).width() )    
-							|| 
-							(mousePosition.y-($(this).height()/2)>eyeContainerPosition.top && mousePosition.y<eyeContainerPosition.top+$(this).height() )    
-							||
-							targetDistance>($(this).width()/2)){
-							//console.log("diff:"+(toCenterdistance-targetDistance));
-							//console.log("distance to target point:"+targetDistance);
-							//getting final x and y
-							
-							var x=Math.cos(
-									Math.atan(slope)
-							)*targetDistance;
-							if(eyePosition.x>mousePosition.x){
-								x+=mousePosition.x;
-							}else if(eyePosition.x<mousePosition.x){
-								x=-x+mousePosition.x;
-							}
-							
-							
-							var y=Math.sin(
-								Math.atan(slope)
-							)*targetDistance;
-							if(eyePosition.x>mousePosition.x){
-									y+=mousePosition.y;
-							}else if(eyePosition.x<mousePosition.x){
-								y=-y+mousePosition.y;
-							}
-						}else{
-							x=mousePosition.x-($(this).width()/2);
-							y=mousePosition.y-($(this).width()/2);
-						}
-						//console.log("#eyeBall_"+$(this).attr("rel"));
-						$("#eyeBall_"+$(this).attr("rel")).css({
-							'left':x+'px',
-							'top':y+'px',
-						});
-					});
-				})
-			});
-			function getDistance(loc1,loc2){
-				return Math.sqrt(
-					Math.pow(
-						(loc1.x-loc2.x)
-						,
-						2
-					)
-					+
-					Math.pow(
-						(loc1.y-loc2.y)
-						,   
-						2
-					)
-				);
-			}
-		</script>
+		<link rel="stylesheet" type="text/css" media="screen" href="style.css"  />
+		<script type="text/javascript"  src="eyes.js"></script>
 	</head>
 	<body>
-<div class='eyeBall' id='eyeBall_1'></div>
-<div class='eyeBall' id='eyeBall_2' ></div>		
+		<div class='eyeBall' id='eyeBall_1'></div>
+		<div class='eyeBall' id='eyeBall_2' ></div>
 		<h3>Playground: beedy eyes</h3>
 		<div class='face'>
-			<div class='eyeContainer' rel='1'>
-			</div>
-			<div class='eyeContainer' rel='2'>
-			</div>
+			<div class='eyeContainer' rel='1'></div>
+			<div class='eyeContainer' rel='2'></div>
 		</div>
+		<canvas id='debugCanvas'></canvas>
 		<pre class='debug'></pre>
 	</body>
 </html>
